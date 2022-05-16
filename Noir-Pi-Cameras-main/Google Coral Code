@@ -1,0 +1,36 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <string>
+#include <fstream>
+#include <vector>
+#include <cstdlib>
+
+using namespace std;
+string get_result(char* command){
+    FILE* pipe = popen(command, "r");
+    if(!pipe)
+    return "ERROR";
+    char buffer[128];
+    string result = "";
+    while(!feof(pipe)){
+        if(fgets(buffer,128,pipe) != NULL)
+        result += buffer;
+    }
+    pclose(pipe);
+    return(result);
+}
+
+int main(){
+    string result;
+    char cmd[100];
+    strcpy(cmd, "raspistill -o -ts test3.jpg -t 500");
+    system(cmd);
+    strcpy(cmd, "dir");
+    system(cmd);
+    strcpy(cmd, "links2 -g /home/pi/Desktop/PiCam/test3.jpg");
+    system(cmd);
+    result = get_result(cmd);
+    cout << result;
+    
+return 0;
